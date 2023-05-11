@@ -10,7 +10,8 @@ package controlpath_signals_pkg is
    
    --*********  INSTRUCTION DECODE **************
    signal branch_id_s       : std_logic := '0';
-   signal jump_id_s         : std_logic := '0';
+   signal jump_id_s         : std_logic_vector(1 downto 0) := (others=>'0');
+   signal load_id_s         : std_logic_vector(2 downto 0) := (others=>'0');
    signal funct3_id_s       : std_logic_vector(2 downto 0) := (others=>'0');
    signal funct7_id_s       : std_logic_vector(6 downto 0) := (others=>'0');
    signal alu_2bit_op_id_s  : std_logic_vector(1 downto 0) := (others=>'0');
@@ -19,7 +20,7 @@ package controlpath_signals_pkg is
    signal rs2_in_use_id_s   : std_logic := '0';
    signal alu_src_a_id_s    : std_logic := '0';
    signal alu_src_b_id_s    : std_logic := '0';
-   signal data_mem_we_id_s  : std_logic := '0';
+   signal data_mem_we_id_s  : std_logic_vector (1 downto 0) := (others=>'0');
    signal rd_we_id_s        : std_logic := '0';
    signal mem_to_reg_id_s   : std_logic := '0';
    signal rs1_address_id_s  : std_logic_vector (4 downto 0) := (others=>'0');
@@ -29,13 +30,14 @@ package controlpath_signals_pkg is
 
    --*********       EXECUTE       **************
    signal branch_ex_s       : std_logic := '0';
-   signal jump_ex_s         : std_logic := '0';
+   signal jump_ex_s         : std_logic_vector(1 downto 0) := (others=>'0');
+   signal load_ex_s         : std_logic_vector(2 downto 0) := (others=>'0');
    signal funct3_ex_s       : std_logic_vector(2 downto 0) := (others=>'0');
    signal funct7_ex_s       : std_logic_vector(6 downto 0) := (others=>'0');
    signal alu_2bit_op_ex_s  : std_logic_vector(1 downto 0) := (others=>'0');
    signal alu_src_a_ex_s    : std_logic := '0';
    signal alu_src_b_ex_s    : std_logic := '0';
-   signal data_mem_we_ex_s  : std_logic := '0';
+   signal data_mem_we_ex_s  : std_logic_vector (1 downto 0) := (others=>'0');
    signal rd_we_ex_s        : std_logic := '0';
    signal mem_to_reg_ex_s   : std_logic := '0';
 
@@ -45,7 +47,7 @@ package controlpath_signals_pkg is
    signal rd_address_ex_s   : std_logic_vector (4 downto 0) := (others=>'0');
 
    --*********       MEMORY        **************
-   signal data_mem_we_mem_s : std_logic := '0';
+   signal data_mem_we_mem_s : std_logic_vector (1 downto 0) := (others=>'0');
    signal rd_we_mem_s       : std_logic := '0';
    signal mem_to_reg_mem_s  : std_logic := '0';
    signal rd_address_mem_s  : std_logic_vector (4 downto 0) := (others=>'0');

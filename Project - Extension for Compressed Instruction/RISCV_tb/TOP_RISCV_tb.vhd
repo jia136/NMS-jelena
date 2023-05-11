@@ -11,7 +11,7 @@ end entity;
 
 architecture Behavioral of TOP_RISCV_tb is
    -- Operand za pristup asemblerskom kodu programa
-   file RISCV_instructions: text open read_mode is "../../../../../RISCV_tb/assembly_code.txt";   
+   file RISCV_instructions: text open read_mode is "../../../../../RISCV_tb/load_store_instructions.txt";   
    -- Globalni signali
    signal clk: std_logic:='0';
    signal reset: std_logic;       

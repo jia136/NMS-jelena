@@ -9,12 +9,12 @@ ENTITY ALU IS
    GENERIC(
       WIDTH : NATURAL := 32);
    PORT(
-      a_i    : in STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0); --prvi operand
-      b_i    : in STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0); --drugi operand
-      op_i   : in STD_LOGIC_VECTOR(4 DOWNTO 0); --selekcija operacije
-      res_o  : out STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0); --rezultat
-      zero_o : out STD_LOGIC; --signalni bit jednakosti nuli
-      of_o   : out STD_LOGIC); --signalni bit prekoracenja opsega
+      a_i    : in STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);   --prvi operand
+      b_i    : in STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);   --drugi operand
+      op_i   : in STD_LOGIC_VECTOR(4 DOWNTO 0);         --selekcija operacije
+      res_o  : out STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);  --rezultat
+      zero_o : out STD_LOGIC;                           --signalni bit jednakosti nuli
+      of_o   : out STD_LOGIC);                          --signalni bit prekoracenja opsega
 END ALU;
 
 ARCHITECTURE behavioral OF ALU IS

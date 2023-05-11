@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -56,8 +56,13 @@ begin
         case opcode is
             when "00" =>
                 compressed <= '1';
-                if (funct3 = "000") then       --c.addi4spn
-                    dec_inst_o <= "00" & inst_i(10 downto 7) & inst_i(12 downto 11) & inst_i(5) & inst_i(6) & "00" & "00010" & "000" & "01" & inst_i(4 downto 2) & "0010011";
+                if (funct3 = "000") then       
+                    if (funct1&rs1_rd&rs2(4 downto 3) = x"00") then    --Illegal instruction                    
+                        dec_inst_o <= (others => '0');               
+                    else                       --c.addi4spn
+                        dec_inst_o <= "00" & inst_i(10 downto 7) & inst_i(12 downto 11) & inst_i(5) & inst_i(6) & "00" & "00010" & "000" & "01" & inst_i(4 downto 2) & "0010011";   
+                    end if;
+                    
                 elsif (funct3 = "001") then    --c.fld is an RV32DC-only instruction, not supported
                     --dec_inst_o <= (31 downto 28 => '0') & inst_i(6 downto 5) & inst_i(12 downto 10) & "000" & "01" & inst_i(9 downto 7) & "011" & "01" & inst_i(4 downto 2) & "0000111"; 
                     dec_inst_o <= (31 downto 7 => '0') & "0010011"; --c.nop

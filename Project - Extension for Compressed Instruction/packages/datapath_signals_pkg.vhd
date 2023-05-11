@@ -26,6 +26,7 @@ package datapath_signals_pkg is
    signal if_id_reg_flush_s       : std_logic := '0';
    --added
    signal jalr_adder_id_s         : std_logic_vector (31 downto 0) := (others=>'0');
+   signal jal_adder_id_s          : std_logic_vector (31 downto 0) := (others=>'0');
    signal jalr_ex_s               : std_logic := '0';
    signal compressed_if_s              : std_logic := '0';
 

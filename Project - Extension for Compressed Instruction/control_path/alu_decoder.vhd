@@ -43,7 +43,7 @@ begin
                   alu_op_o <= ltu_op;
                when "101" =>
                   alu_op_o <= srl_op;
-                  if(funct7_i(5)='1')then 
+                  if(funct7_i(5) = '1')then 
                      alu_op_o <= sra_op;
                   end if;
                when "100" =>

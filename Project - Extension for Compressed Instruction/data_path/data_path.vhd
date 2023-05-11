@@ -24,7 +24,8 @@ entity data_path is
       alu_src_b_i         : in  std_logic;
       pc_next_sel_i       : in  std_logic_vector(1 downto 0);
       rd_we_i             : in  std_logic;
-      jump_i              : in std_logic;
+      jump_i              : in  std_logic;
+      load_i              : in  std_logic_vector(2 downto 0);
       branch_condition_o  : out std_logic;
       -- kontrolni signali za prosledjivanje operanada u ranije faze protocne obrade
       alu_forward_a_i     : in  std_logic_vector(1 downto 0);
@@ -140,7 +141,8 @@ begin
 
    -- sabirac za uslovne skokove
    branch_adder_id_s <= std_logic_vector(signed(immediate_extended_id_s) + signed(pc_reg_id_s));
-   
+   -- sabirac za jump and link skok
+   jal_adder_id_s <= std_logic_vector(signed(immediate_extended_id_s) + signed(pc_reg_id_s));
    -- multiplekser za sabirac za jump and link reg skok   
    jalr_adder_id_s <= std_logic_vector(signed(immediate_extended_id_s) + signed(rs1_data_id_s)) and not std_logic_vector(to_signed(1, 32)) when jump_forward_a_i = '0' else
                       std_logic_vector(signed(immediate_extended_id_s) + signed(alu_result_mem_s))and not std_logic_vector(to_signed(1, 32));
@@ -152,13 +154,47 @@ begin
                               rs2_data_id_s;
 
    -- provera uslova za skok
-   branch_condition_o <= '1' when (signed(branch_condition_a_ex_s) = signed(branch_condition_b_ex_s)) else
-                         '0';
+   -- MUX koji vrsi proveru uslova skoka
+   branch_mux: process(branch_condition_a_ex_s, branch_condition_b_ex_s, instruction_id_s)
+   begin
+        branch_condition_o <= '0';
+        case instruction_id_s(14 downto 12) is
+            when "000" =>
+                if (signed(branch_condition_a_ex_s) = signed(branch_condition_b_ex_s)) then
+                    branch_condition_o <= '1';
+                end if;                
+            when "001" =>
+                if (signed(branch_condition_a_ex_s) /= signed(branch_condition_b_ex_s)) then
+                    branch_condition_o <= '1'; 
+                end if;
+            when "100" =>
+                if (signed(branch_condition_a_ex_s) < signed(branch_condition_b_ex_s)) then
+                    branch_condition_o <= '1';
+                end if;
+            when "101" =>
+                if (signed(branch_condition_a_ex_s) >= signed(branch_condition_b_ex_s)) then
+                    branch_condition_o <= '1';
+                end if;
+            when "110" =>
+                if (unsigned(branch_condition_a_ex_s) < unsigned(branch_condition_b_ex_s)) then
+                    branch_condition_o <= '1';
+                end if;
+            when "111" =>
+                if (unsigned(branch_condition_a_ex_s) >= unsigned(branch_condition_b_ex_s)) then
+                    branch_condition_o <= '1';
+                end if;
+            when others =>
+                branch_condition_o <= '0';
+        end case;     
+   end process branch_mux;
+   --branch_condition_o <= '1' when (signed(branch_condition_a_ex_s) = signed(branch_condition_b_ex_s)) else
+   --                      '0';
 
    -- multiplekser za azuriranje programskog brojaca
    with pc_next_sel_i select
       pc_next_if_s <= pc_adder_if_s when "00",
       branch_adder_id_s             when "01",
+      jal_adder_id_s                when "10",
       jalr_adder_id_s               when others;
 
    -- multiplekseri za prosledjivanje operanada iz kasnijih faza pajplajna
@@ -185,10 +221,26 @@ begin
    a_ex_s <= pc_adder_ex_s when alu_src_a_i = '1' else
              alu_forward_a_ex_s;
 
-   -- multiplekser koji selektuje sta se upisuje u odredisni registar
-   rd_data_wb_s <= data_mem_read_wb_s when mem_to_reg_i = '1' else
-                   alu_result_wb_s;
-
+   -- multiplekser koji selektuje sta se upisuje u odredisni registar(rd_data_wb_s)
+   rd_process: process(mem_to_reg_i, alu_result_wb_s, data_mem_read_wb_s, load_i)
+   begin
+        if (mem_to_reg_i = '0') then
+            rd_data_wb_s <= alu_result_wb_s;
+        elsif (load_i = "001") then --LB
+            rd_data_wb_s <= (31 downto 8 => data_mem_read_wb_s(7)) & data_mem_read_wb_s(7 downto 0);
+        elsif (load_i = "010") then --LH
+            rd_data_wb_s <= (31 downto 16 => data_mem_read_wb_s(15)) & data_mem_read_wb_s(15 downto 0);
+        elsif (load_i = "011") then --LW
+            rd_data_wb_s <= data_mem_read_wb_s;
+        elsif (load_i = "100") then --LBU
+            rd_data_wb_s <= (31 downto 8 => '0') & data_mem_read_wb_s(7 downto 0);
+        elsif (load_i = "101") then --LHU
+            rd_data_wb_s <= (31 downto 16 => '0') & data_mem_read_wb_s(15 downto 0);
+        else
+            rd_data_wb_s <= data_mem_read_wb_s;
+        end if;
+   end process rd_process;
+   
    -- izdvoji adrese opereanada iz 32-bitne instrukcije
    rs1_address_id_s <= instruction_id_s(19 downto 15);
    rs2_address_id_s <= instruction_id_s(24 downto 20);

@@ -38,13 +38,13 @@ begin
    -- asinhrono citanje, po specifikaciji nulti registar je uvek nula
    reg_bank_read: process (rs1_address_i,rs2_address_i,reg_bank_s) is
    begin
-      if(to_integer(unsigned(rs1_address_i))=0) then
-         rs1_data_o <= std_logic_vector(to_unsigned(0,WIDTH));
+      if(to_integer(unsigned(rs1_address_i)) = 0) then
+         rs1_data_o <= std_logic_vector(to_unsigned(0, WIDTH));
       else
          rs1_data_o <= reg_bank_s(to_integer(unsigned(rs1_address_i)));
       end if;
 
-      if(to_integer(unsigned(rs2_address_i))=0) then
+      if(to_integer(unsigned(rs2_address_i)) = 0) then
          rs2_data_o <= std_logic_vector(to_unsigned(0,WIDTH));
       else
          rs2_data_o <= reg_bank_s(to_integer(unsigned(rs2_address_i)));
