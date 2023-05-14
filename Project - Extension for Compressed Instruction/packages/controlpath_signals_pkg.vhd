@@ -47,12 +47,14 @@ package controlpath_signals_pkg is
    signal rd_address_ex_s   : std_logic_vector (4 downto 0) := (others=>'0');
 
    --*********       MEMORY        **************
+   signal load_mem_s         : std_logic_vector(2 downto 0) := (others=>'0');
    signal data_mem_we_mem_s : std_logic_vector (1 downto 0) := (others=>'0');
    signal rd_we_mem_s       : std_logic := '0';
    signal mem_to_reg_mem_s  : std_logic := '0';
    signal rd_address_mem_s  : std_logic_vector (4 downto 0) := (others=>'0');
 
    --*********      WRITEBACK      **************
+   signal load_wb_s         : std_logic_vector(2 downto 0) := (others=>'0');
    signal rd_we_wb_s        : std_logic := '0';
    signal mem_to_reg_wb_s   : std_logic := '0';
    signal rd_address_wb_s   : std_logic_vector (4 downto 0) := (others=>'0');

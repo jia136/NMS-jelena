@@ -1,0 +1,25 @@
+# Control Transfer Instructions
+li x10 5         # x10 = 00000005
+li x11 24        # x11 = 00000018
+li x12 91        # x12 = 0000005b
+c.beqz x12 8     # no branch, x12 = 0000005b
+c.addi x13 3     # x13 = 00000003
+c.bnez x10 4     # branch, transfer pc_next = 0x14
+c.addi x13 11    # skip, x13 = 00000003
+c.addi x11 2     # x11 = 0000001a
+c.j 6            # transfer pc_next = 0x1c           
+c.addi x11 9     # skip, x11 = 00000018
+c.jr x1          # 1. skip, 2. transfer pc_next = 0x0000002a
+c.addi x13 4     # x13 = 00000007
+c.jal 6          # transfer pc_next = 24, x1 = 00000020
+c.addi x9 7      # 1.skip, 2. x9 = 00000007
+c.bnez x9 4      # 1.skip, 2. transfer pc_next = 0x26
+c.jr x1          # transfer pc_next = 0x20
+c.andi x9 12     # x9 = 00000004
+c.jalr x11       # transfer pc_next = 0x1a, x1 = 0000002a
+c.nop
+
+
+
+
+

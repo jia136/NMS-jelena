@@ -27,6 +27,7 @@ architecture structural of TOP_RISCV is
    signal alu_src_b_s        : std_logic;
    signal rd_we_s            : std_logic;
    signal jump_s             : std_logic;
+   signal load_s             : std_logic_vector(2 downto 0);
    signal pc_next_sel_s      : std_logic_vector(1 downto 0);
 
    signal if_id_flush_s      : std_logic;
@@ -64,6 +65,7 @@ begin
          alu_src_b_i         => alu_src_b_s,
          rd_we_i             => rd_we_s,
          jump_i              => jump_s,
+         load_i              => load_s,
          pc_next_sel_i       => pc_next_sel_s,
          branch_condition_o  => branch_condition_s,
          -- kontrolni signali za prosledjivanje operanada u ranije faze protocne obrade
@@ -94,6 +96,7 @@ begin
          alu_src_b_o         => alu_src_b_s,
          rd_we_o             => rd_we_s,
          jump_o              => jump_s,
+         load_o              => load_s,
          pc_next_sel_o       => pc_next_sel_s,
          branch_condition_i  => branch_condition_s,
          -- kontrolni signali za prosledjivanje operanada u ranije faze protocne obrade

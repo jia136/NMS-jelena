@@ -124,11 +124,13 @@ begin
    begin
       if (rising_edge(clk)) then
          if (reset = '0')then
+            load_mem_s        <= (others => '0');
             data_mem_we_mem_s <= "00";
             rd_we_mem_s       <= '0';
             mem_to_reg_mem_s  <= '0';
             rd_address_mem_s  <= (others => '0');
          else
+            load_mem_s        <= load_ex_s;
             data_mem_we_mem_s <= data_mem_we_ex_s;
             rd_we_mem_s       <= rd_we_ex_s;
             mem_to_reg_mem_s  <= mem_to_reg_ex_s;
@@ -142,10 +144,12 @@ begin
    begin
       if (rising_edge(clk)) then
          if (reset = '0')then
+            load_wb_s       <= (others => '0');
             rd_we_wb_s      <= '0';
             mem_to_reg_wb_s <= '0';
             rd_address_wb_s <= (others => '0');
          else
+            load_wb_s       <= load_mem_s;
             rd_we_wb_s      <= rd_we_mem_s;
             mem_to_reg_wb_s <= mem_to_reg_mem_s;
             rd_address_wb_s <= rd_address_mem_s;
@@ -232,7 +236,7 @@ begin
    rd_we_o       <= rd_we_wb_s;
    if_id_flush_o <= if_id_flush_s;
    jump_o        <= jump_ex_s(0) xor jump_ex_s(1);
-   load_o        <= load_ex_s;
+   load_o        <= load_wb_s;
 
 
 end architecture;

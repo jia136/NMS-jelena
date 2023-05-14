@@ -18,7 +18,6 @@ ENTITY ALU IS
 END ALU;
 
 ARCHITECTURE behavioral OF ALU IS
-
    constant  l2WIDTH : natural := integer(ceil(log2(real(WIDTH))));
    signal    add_res, sub_res, or_res, and_res,res_s, eq_res :  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
    signal    sll_res, srl_res, sra_res, xor_res, lts_res, ltu_res : STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);

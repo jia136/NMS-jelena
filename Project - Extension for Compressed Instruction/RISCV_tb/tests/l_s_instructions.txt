@@ -1,0 +1,22 @@
+#Load and Store Instructions
+#Registar-Based Loads and Stores
+li x8 6            # x8 = 6
+li x9 8            # x9 = 8
+li x10 16          # x10 = 10
+li x11 17          # x11 = 11
+c.sw x9 x8 12      # mem[0x12] = 8
+sw  x10 4(x9)      # mem[0x0c] = 10
+sb x11 18(x8)      # mem[0x18] = 11(w) = 11(b)
+sh x11 20(x9)      # mem[0x1c] = 11(w) = 11(hw)
+li x10 5           # x10 = 5
+li x9 10           # x9 = a
+c.lw x10 x9 2      # x10 = mem[0x0a] = 00100000
+c.lw x9 x8 12      # x9  = mem[0x12] = 00000008
+lw x15 2(x9)       # x15 = mem[0x0a] = 00100000
+lh x16 18(x8)      # x16 = mem[0x18] = 00000011
+lb x17 20(x9)      # x17 = mem[0x1c] = 00000011
+#Stack Pointer-Based Loads and Stores
+li x11 5           # x11 = 5
+c.swsp x11 8       # mem[x2 + 0x08] = x11 = 5
+c.lwsp x10 8       # x10 = mem[x2 + 0x08] = 5
+nop

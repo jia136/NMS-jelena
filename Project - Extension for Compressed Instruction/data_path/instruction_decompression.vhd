@@ -86,17 +86,17 @@ begin
                     if (funct1&rs2 = "000000") then     --c.nop
                         dec_inst_o <= (31 downto 7 => '0') & "0010011";
                     else                                --c.addi
-                        dec_inst_o <= (31 downto 26 => '0') & inst_i(12) & inst_i(6 downto 2) & inst_i(11 downto 7) & "000" & inst_i(11 downto 7) & "0010011";
+                        dec_inst_o <= (31 downto 25 => inst_i(12)) & inst_i(6 downto 2) & inst_i(11 downto 7) & "000" & inst_i(11 downto 7) & "0010011";
                     end if;
                 elsif (funct3 = "001") then    --c.jal
-                    dec_inst_o <= '0' & inst_i(8) & inst_i(10 downto 9) & inst_i(6) & inst_i(7) & inst_i(2) & inst_i(11) & inst_i(5 downto 3) & inst_i(12) & (19 downto 8 => '0') & '1' & "1101111";
+                    dec_inst_o <= inst_i(12) & inst_i(8) & inst_i(10 downto 9) & inst_i(6) & inst_i(7) & inst_i(2) & inst_i(11) & inst_i(5 downto 3) & (20 downto 8 => inst_i(12)) & '1' & "1101111";
                 elsif (funct3 = "010") then    --c.li
-                    dec_inst_o <= (31 downto 26 => '0') & inst_i(12) & inst_i(6 downto 2) & (19 downto 12 => '0') & inst_i(11 downto 7) & "0010011";
+                    dec_inst_o <= (31 downto 25 => inst_i(12)) & inst_i(6 downto 2) & (19 downto 12 => '0') & inst_i(11 downto 7) & "0010011";
                 elsif (funct3 = "011") then
                     if (rs1_rd = "00010") then --c.addi16sp
-                        dec_inst_o <= (31 downto 30 => '0') & inst_i(12) & inst_i(4 downto 3) & inst_i(5) & inst_i(2) & inst_i(6)  & (23 downto 20 => '0') & "00010" & "000" & "00010" & "0010011";
+                        dec_inst_o <= (31 downto 29 => inst_i(12)) & inst_i(4 downto 3) & inst_i(5) & inst_i(2) & inst_i(6)  & (23 downto 20 => '0') & "00010" & "000" & "00010" & "0010011";
                     else                       --c.lui
-                        dec_inst_o <= (31 downto 18 => '0') & inst_i(12) & inst_i(6 downto 2) & inst_i(11 downto 7) & "0110111";
+                        dec_inst_o <= (31 downto 17 => inst_i(12)) & inst_i(6 downto 2) & inst_i(11 downto 7) & "0110111";
                     end if;
                 elsif (funct3 = "100") then
                     if (rs1_rd(4 downto 3) = "00") then     --c.srli
@@ -104,7 +104,7 @@ begin
                     elsif (rs1_rd(4 downto 3) = "01") then  --c.srai
                         dec_inst_o <= "01" & (29 downto 25 => '0') & inst_i(6 downto 2) & "01" & inst_i(9 downto 7) & "101" & "01" & inst_i(9 downto 7) & "0010011";
                     elsif (rs1_rd(4 downto 3) = "10") then  --c.andi
-                        dec_inst_o <= (31 downto 26 => '0') & inst_i(12) & inst_i(6 downto 2) & "01" & inst_i(9 downto 7) & "111" & "01" & inst_i(9 downto 7) & "0010011";
+                        dec_inst_o <= (31 downto 25 => inst_i(12)) & inst_i(6 downto 2) & "01" & inst_i(9 downto 7) & "111" & "01" & inst_i(9 downto 7) & "0010011";
                     else
                         if (rs2(4 downto 3) = "00") then    --c.sub
                             dec_inst_o <= "01" & (29 downto 25 => '0') & "01" & inst_i(4 downto 2) & "01" & inst_i(9 downto 7) & "000" & "01" & inst_i(9 downto 7) & "0110011";  
@@ -117,11 +117,11 @@ begin
                         end if;
                     end if;
                 elsif (funct3 = "101") then                 --c.j
-                    dec_inst_o <= '0' & inst_i(8) & inst_i(10 downto 9) & inst_i(6) & inst_i(7) & inst_i(2) & inst_i(11) & inst_i(5 downto 3) & inst_i(12) & (19 downto 7 => '0') & "1101111";
+                    dec_inst_o <= inst_i(12) & inst_i(8) & inst_i(10 downto 9) & inst_i(6) & inst_i(7) & inst_i(2) & inst_i(11) & inst_i(5 downto 3) & (20 downto 7 => inst_i(12)) & "1101111";
                 elsif (funct3 = "110") then                 --c.beqz
-                    dec_inst_o <= (31 downto 29 => '0') & inst_i(12) & inst_i(6 downto 5) & inst_i(2) & (24 downto 20 => '0') & "01" & inst_i(9 downto 7) & "000" & inst_i(11 downto 10) & inst_i(4 downto 3) & '0' & "1100011";
+                    dec_inst_o <= (31 downto 28 => inst_i(12)) & inst_i(6 downto 5) & inst_i(2) & (24 downto 20 => '0') & "01" & inst_i(9 downto 7) & "000" & inst_i(11 downto 10) & inst_i(4 downto 3) & inst_i(12) & "1100011";
                 else                                        --c.bnez
-                    dec_inst_o <= (31 downto 29 => '0') & inst_i(12) & inst_i(6 downto 5) & inst_i(2) & (24 downto 20 => '0') & "01" & inst_i(9 downto 7) & "001" & inst_i(11 downto 10) & inst_i(4 downto 3) & '0' & "1100011";
+                    dec_inst_o <= (31 downto 28 => inst_i(12)) & inst_i(6 downto 5) & inst_i(2) & (24 downto 20 => '0') & "01" & inst_i(9 downto 7) & "001" & inst_i(11 downto 10) & inst_i(4 downto 3) & inst_i(12) & "1100011";
                 end if;
             when "10" =>
                 compressed <= '1';
@@ -150,7 +150,7 @@ begin
                                 dec_inst_o <= (31 downto 20 => '0') & inst_i(11 downto 7) & "000" & (11 downto 8 => '0') & '1' & "1100111";
                             end if;
                         else                                --c.add
-                            dec_inst_o <= (31 downto 25 => '0') & "01" & inst_i(4 downto 2) & "01" & inst_i(9 downto 7) & "000" & "01" & inst_i(9 downto 7) & "0110011";
+                            dec_inst_o <= (31 downto 25 => '0') & inst_i(6 downto 2) & inst_i(11 downto 7) & "000" & inst_i(11 downto 7) & "0110011";
                         end if;
                     end if;
                 elsif (funct3 = "101") then                 --c.fsdsp is an RV32DC-only instruction, not supported
